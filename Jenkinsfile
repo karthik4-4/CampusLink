@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_USERNAME = 'thalakantikarthikkumarreddy@gmail.com'
+        DOCKER_HUB_USERNAME = 'thalakantikarthikkumarreddy'
         AWS_DEFAULT_REGION  = 'us-east-1'
     }
 
