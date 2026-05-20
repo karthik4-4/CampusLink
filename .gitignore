@@ -1,5 +1,5 @@
 Images/
-.env
+.env*
 
 # Terraform
 **/.terraform/
@@ -10,4 +10,4 @@ Images/
 
 # Private keys / credentials
 *.pem
-credentials
+credentials
