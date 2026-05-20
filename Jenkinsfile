@@ -67,7 +67,8 @@ pipeline {
             steps {
                 withCredentials([
                     string(credentialsId: 'jwt-password', variable: 'JWT_PASS'),
-                    string(credentialsId: 'next-public-google-client-id', variable: 'GOOGLE_CLIENT_ID')
+                    string(credentialsId: 'next-public-google-client-id', variable: 'GOOGLE_CLIENT_ID'),
+                    file(credentialsId: 'ec2-ssh-key', variable: 'SSH_KEY')
                 ]) {
                     script {
                         // Retrieve the deployed EC2 public IP from Terraform
@@ -87,14 +88,14 @@ pipeline {
                         """
 
                         // Fix the permissions of the generated ssh key
-                        sh "chmod 400 terraform/app-key.pem"
+                        sh "chmod 400 \${SSH_KEY}"
 
                         // Wait for SSH to become available on the EC2 instance
                         echo "Waiting for SSH daemon on EC2 to accept connections..."
                         sh """
                             bash -c '
                             count=0
-                            until ssh -i terraform/app-key.pem -o StrictHostKeyChecking=no -o ConnectTimeout=5 ec2-user@${env.INSTANCE_IP} exit 2>/dev/null; do
+                            until ssh -i \${SSH_KEY} -o StrictHostKeyChecking=no -o ConnectTimeout=5 ec2-user@\${INSTANCE_IP} exit 2>/dev/null; do
                                 if [ \$count -gt 24 ]; then
                                     echo "Timed out waiting for SSH daemon on EC2"
                                     exit 1
@@ -108,13 +109,13 @@ pipeline {
 
                         // Copy docker-compose.prod.yml and .env.prod (as .env) to the remote host
                         echo "Copying configuration files to EC2..."
-                        sh "scp -i terraform/app-key.pem -o StrictHostKeyChecking=no docker-compose.prod.yml ec2-user@${env.INSTANCE_IP}:/home/ec2-user/app/docker-compose.prod.yml"
-                        sh "scp -i terraform/app-key.pem -o StrictHostKeyChecking=no .env.prod ec2-user@${env.INSTANCE_IP}:/home/ec2-user/app/.env"
+                        sh "scp -i \${SSH_KEY} -o StrictHostKeyChecking=no docker-compose.prod.yml ec2-user@\${INSTANCE_IP}:/home/ec2-user/app/docker-compose.prod.yml"
+                        sh "scp -i \${SSH_KEY} -o StrictHostKeyChecking=no .env.prod ec2-user@\${INSTANCE_IP}:/home/ec2-user/app/.env"
 
                         // Deploy by pulling the latest images and starting the containers
                         echo "Pulling images and starting services on EC2..."
                         sh """
-                            ssh -i terraform/app-key.pem -o StrictHostKeyChecking=no ec2-user@${env.INSTANCE_IP} '
+                            ssh -i \${SSH_KEY} -o StrictHostKeyChecking=no ec2-user@\${INSTANCE_IP} '
                                 cd /home/ec2-user/app
                                 docker-compose -f docker-compose.prod.yml pull
                                 docker-compose -f docker-compose.prod.yml up -d
