@@ -17,3 +17,13 @@ output "backend_url" {
   description = "URL to access the backend API"
   value       = "http://${aws_instance.app_server.public_ip}:3001"
 }
+
+output "prometheus_url" {
+  description = "URL to access the Prometheus Web UI"
+  value       = "http://${aws_instance.app_server.public_ip}:9090"
+}
+
+output "grafana_url" {
+  description = "URL to access the Grafana Dashboard"
+  value       = "http://${aws_instance.app_server.public_ip}:3002"
+}
