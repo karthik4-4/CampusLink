@@ -1,8 +1,8 @@
 import { Router, Request, Response } from "express";
-import { googleClient } from "../config.js";
-import { prismaClient } from "../db/index.js";
-import { JWT_PASSWORD } from "../config.js";
-import { authmiddleware } from "./middleware.js";
+import { googleClient } from "../config";
+import { prismaClient } from "../db/index";
+import { JWT_PASSWORD } from "../config";
+import { authmiddleware } from "./middleware";
 import jwt from "jsonwebtoken";
 
 const googlerouter = Router();

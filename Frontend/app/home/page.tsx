@@ -12,8 +12,8 @@ interface ProfileProps {
   name: string;
   email: string;
   avatar: string;
-  createdAt: string;
-  updatedAt: string;
+  CreatedAt: string;
+  UpdatedAt: string;
 }
 
 export default function Dashboard() {
@@ -38,7 +38,7 @@ export default function Dashboard() {
       maxBodyLength: Infinity,
       url: "http://localhost:3001/api/v1/googleauth/me",
       headers: {
-        Authorization: `${token}`,
+        Authorization: `Bearer ${token}`,
       },
     };
 
@@ -54,6 +54,7 @@ export default function Dashboard() {
 
   React.useEffect(() => {
     fetchProfile();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -74,20 +75,14 @@ export default function Dashboard() {
               <span className="text-sm font-semibold text-gray-200 hidden sm:block">
                 Hi, {profile.name}
               </span>
-              {profile.avatar ? (
-                <Image
-                  src={profile.avatar}
-                  alt={profile.name || "User avatar"}
-                  width={28}
-                  height={28}
-                  className="rounded-full ring-2 ring-[#bdf365]/30"
-                  unoptimized
-                />
-              ) : (
-                <div className="w-7 h-7 rounded-full bg-[#bdf365]/20 flex items-center justify-center text-[#bdf365] font-bold text-xs">
-                  {profile.name.charAt(0).toUpperCase()}
-                </div>
-              )}
+              <Image
+                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100&q=80"
+                alt={profile.name || "User avatar"}
+                width={28}
+                height={28}
+                className="rounded-full ring-2 ring-[#bdf365]/30 object-cover"
+                unoptimized
+              />
             </div>
           )}
           

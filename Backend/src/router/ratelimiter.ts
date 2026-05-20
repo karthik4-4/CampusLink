@@ -5,8 +5,8 @@ import { redisClient } from "../db/redis-cli";
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const ip = (
-        req.headers["x-forwarded-for"] || req.connection.remoteAddress
-      )?.toString().slice(0, 9) || "unknown";
+        req.headers["x-forwarded-for"] || req.socket.remoteAddress
+      )?.toString() || "unknown";
 
       let ttl;
       const request = await redisClient.incr(ip);

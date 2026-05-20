@@ -9,10 +9,10 @@ COPY package*.json ./
 RUN npm install
 
 # Copy source and prisma schema
-COPY . .
+COPY . ./
 
 # Generate Prisma client
-RUN npx prisma generate
+RUN DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholder" npx prisma generate
 
 # Build TypeScript code
 RUN npm run build || npx tsc -b
@@ -25,8 +25,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --omit=dev
 
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/dist ./dist
 
 # Expose port (adjust if your app uses a different one, usually 8080 or 3000)

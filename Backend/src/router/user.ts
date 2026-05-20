@@ -18,7 +18,7 @@ router.post(
       const parsedBody = UserSignupSchema.safeParse(body);
 
       if (!parsedBody.success) {
-        return res.status(411).json({ message: parsedBody.error.errors[0].message });
+        return res.status(411).json({ message: parsedBody.error.issues[0].message });
       }
 
       const userExists = await prismaClient.user.findUnique({
@@ -56,7 +56,7 @@ router.post(
       const parsedBody = UserLoginSchema.safeParse(body);
 
       if (!parsedBody.success) {
-        return res.status(411).json({ message: parsedBody.error.errors[0].message });
+        return res.status(411).json({ message: parsedBody.error.issues[0].message });
       }
 
       const user = await prismaClient.user.findUnique({
