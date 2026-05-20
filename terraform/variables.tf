@@ -9,3 +9,9 @@ variable "instance_type" {
   type        = string
   default     = "t3.micro" # t3.micro is free-tier eligible in this region/account. We will use swap space to handle memory limits.
 }
+
+variable "key_name" {
+  description = "Name of the existing AWS Key Pair to associate with the instance"
+  type        = string
+  default     = "app-key"
+}

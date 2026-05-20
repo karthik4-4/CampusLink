@@ -68,28 +68,11 @@ resource "aws_security_group" "app_sg" {
   }
 }
 
-# Optional: Generate an SSH key pair
-resource "tls_private_key" "pk" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-resource "aws_key_pair" "kp" {
-  key_name   = "app-key"
-  public_key = tls_private_key.pk.public_key_openssh
-}
-
-resource "local_file" "ssh_key" {
-  filename        = "${path.module}/app-key.pem"
-  content         = tls_private_key.pk.private_key_pem
-  file_permission = "0400"
-}
-
 # EC2 Instance
 resource "aws_instance" "app_server" {
   ami           = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
-  key_name      = aws_key_pair.kp.key_name
+  key_name      = var.key_name
 
   vpc_security_group_ids = [aws_security_group.app_sg.id]
 
