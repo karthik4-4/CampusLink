@@ -36,7 +36,7 @@ export default function Navbar() {
       {/* Middle: App Name & Logo */}
       <Link href="/" className="flex items-center justify-center gap-2 absolute left-1/2 -translate-x-1/2 cursor-pointer hover:opacity-80 transition-opacity">
         <GraduationCap className="h-6 w-6 text-[#bdf365]" />
-        <div className="text-xl font-black tracking-tighter text-white uppercase">CampusLink</div>
+        <div className="text-xl font-black tracking-tighter text-white uppercase">CampLink</div>
       </Link>
 
       {/* Right Side: Auth Buttons */}
