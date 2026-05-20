@@ -1,1 +1,13 @@
 Images/
+.env
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+*.tfvars.json
+
+# Private keys / credentials
+*.pem
+credentials

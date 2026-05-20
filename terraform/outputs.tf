@@ -15,5 +15,5 @@ output "frontend_url" {
 
 output "backend_url" {
   description = "URL to access the backend API"
-  value       = "http://${aws_instance.app_server.public_ip}:8080"
+  value       = "http://${aws_instance.app_server.public_ip}:3001"
 }

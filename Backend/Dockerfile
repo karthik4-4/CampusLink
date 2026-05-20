@@ -2,13 +2,10 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
 
-# Install dependencies (including devDependencies needed for build)
 RUN npm install
 
-# Copy source and prisma schema
 COPY . ./
 
 # Generate Prisma client
@@ -26,9 +23,9 @@ COPY package*.json ./
 RUN npm install --omit=dev
 
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.js ./prisma.config.js
 
-# Expose port (adjust if your app uses a different one, usually 8080 or 3000)
-EXPOSE 8080
+EXPOSE 3001
 
-# Command to run
-CMD ["node", "dist/index.js"]
+CMD ["sh", "-c", "npx prisma db push && node dist/index.js"]

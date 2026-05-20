@@ -30,7 +30,7 @@ resource "aws_default_vpc" "default" {
   }
 }
 
-# Security group to allow HTTP, SSH, and App ports
+# Security group to allow SSH, Frontend, and Backend ports
 resource "aws_security_group" "app_sg" {
   name        = "app_security_group"
   description = "Allow inbound traffic for app"
@@ -54,16 +54,8 @@ resource "aws_security_group" "app_sg" {
 
   # Backend
   ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # HTTP/HTTPS standard
-  ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 3001
+    to_port     = 3001
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -101,9 +93,16 @@ resource "aws_instance" "app_server" {
 
   vpc_security_group_ids = [aws_security_group.app_sg.id]
 
-  # User data to install docker, docker-compose and git
+  # User data to install docker, docker-compose, git, and configure swap space
   user_data = <<-EOF
               #!/bin/bash
+              # Set up 2GB swap space to handle memory constraints on free-tier instance
+              fallocate -l 2G /swapfile
+              chmod 600 /swapfile
+              mkswap /swapfile
+              swapon /swapfile
+              echo '/swapfile swap swap defaults 0 0' >> /etc/fstab
+
               # Update OS
               dnf update -y
               

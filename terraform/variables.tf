@@ -7,5 +7,5 @@ variable "aws_region" {
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t3.small" # t3.small is better for running 4 containers than t2.micro
+  default     = "t3.micro" # t3.micro is free-tier eligible in this region/account. We will use swap space to handle memory limits.
 }
