@@ -19,6 +19,5 @@ module.exports = defineConfig({
       const { PrismaPg } = require("@prisma/adapter-pg");
       return new PrismaPg(new Pool({ connectionString: processEnv["DATABASE_URL"] }));
     },
-  }, clear
-
+  },
 });
