@@ -109,8 +109,10 @@ pipeline {
 
                         // Copy docker-compose.prod.yml and .env.prod (as .env) to the remote host
                         echo "Copying configuration files to EC2..."
+                        sh "ssh -i \${SSH_KEY} -o StrictHostKeyChecking=no ec2-user@\${INSTANCE_IP} 'mkdir -p /home/ec2-user/app/prometheus'"
                         sh "scp -i \${SSH_KEY} -o StrictHostKeyChecking=no docker-compose.prod.yml ec2-user@\${INSTANCE_IP}:/home/ec2-user/app/docker-compose.prod.yml"
                         sh "scp -i \${SSH_KEY} -o StrictHostKeyChecking=no .env.prod ec2-user@\${INSTANCE_IP}:/home/ec2-user/app/.env"
+                        sh "scp -i \${SSH_KEY} -o StrictHostKeyChecking=no prometheus/prometheus.yml ec2-user@\${INSTANCE_IP}:/home/ec2-user/app/prometheus/prometheus.yml"
 
                         // Deploy by pulling the latest images and starting the containers
                         echo "Pulling images and starting services on EC2..."
