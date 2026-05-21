@@ -86,7 +86,6 @@ pipeline {
                             echo 'INSTANCE_IP=${env.INSTANCE_IP}' >> .env.prod
                             echo 'NEXT_PUBLIC_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}' >> .env.prod
                         """
-
                         // Fix the permissions of the generated ssh key
                         sh "chmod 400 \${SSH_KEY}"
 
